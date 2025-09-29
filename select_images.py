@@ -250,7 +250,7 @@ for p in res.selected[:5]:
     print(" -", p)'''
 
 # 2) 80th percentile, exclude unrated, only JPG/JPEG, non-recursive
-res80 = filter_images_by_rating(
+'''res80 = filter_images_by_rating(
     folder=Path("data"),
     percentile=0.2,
     include_unrated_in_result=False,
@@ -259,4 +259,4 @@ res80 = filter_images_by_rating(
 )
 print(res80.stats)
 for p in res80.selected:
-    print(" -", p)
+    print(" -", p)'''
