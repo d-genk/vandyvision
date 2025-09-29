@@ -512,6 +512,11 @@ def augment_condensed_metadata(
     if _non_null(out.get("subject_1_term")):
         out["subject_1_type"] = "topical"
         out["subject_1_source"] = "local sources"
+    
+    out["digital_object_title"] = image_path.name
+    out["rep_use_statement"] = "born-digital-record-master"
+    out["rep_file_format"] = "JPEG"
+    out["rep_file_format_version"] = "fmt/42"
 
     return out
 
