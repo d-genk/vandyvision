@@ -1,10 +1,11 @@
 from __future__ import annotations
+from datetime import datetime
 
 import json
 import shutil
 import subprocess
 from pathlib import Path
-from typing import Any, Dict, Iterable, Optional, Union
+from typing import Any, Dict, Iterable, Union
 
 # =========================
 # Public entry point
@@ -389,6 +390,8 @@ def condense_metadata(meta: Meta) -> Dict[str, Any]:
 
     # begin ← CreateDate (often EXIF:CreateDate; sometimes also XMP-xmp:CreateDate)
     out["begin"] = _first_present(meta, ("EXIF:CreateDate", "CreateDate", "XMP-xmp:CreateDate"))
+    dt = datetime.strptime(out["begin"], "%Y:%m:%d %H:%M:%S")
+    out["begin"] = dt.strftime("%Y-%m-%d")
 
     # people_agent_header_1 ← Artist
     out["people_agent_header_1"] = _first_present(meta, ("IPTC:By-line", "IFD0:Artist", "Creator", "Artist"))
@@ -480,13 +483,13 @@ def augment_condensed_metadata(
         out["extent_type"] = "MB"
 
     # 3) standard fields (with the specified conditionals)
-    out["restrictions_flag"] = "Yes"
+    out["restrictions_flag"] = "False"
     out["processing_note"] = (
-        "This picture was held in VandyVision, the digital asset management system called PhotoShelter."
+        "This picture was held in VandyVision, an instance of the digital asset management system called PhotoShelter."
     )
     out["portion"] = "1"
     out["type_2"] = "Item"
-    out["p_acqinfo"] = "Yes"
+    out["p_acqinfo"] = "True"
     out["n_acqinfo"] = "PhotoShelter https://www.photoshelter.com"
 
     # Conditionally add date-related labels if begin is present
@@ -505,7 +508,7 @@ def augment_condensed_metadata(
 
     # p_odd / l_odd based on n_odd presence
     if _non_null(out.get("n_odd")):
-        out["p_odd"] = "Yes"
+        out["p_odd"] = "True"
         out["l_odd"] = "location"
 
     # subject_1 qualifiers if subject_1_term present
